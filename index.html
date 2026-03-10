@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>لعبة الاستراحة</title>
+
+<style>
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+}
+
+.board{
+display:grid;
+grid-template-columns:repeat(6,1fr);
+gap:10px;
+width:95%;
+margin:auto;
+margin-top:30px;
+}
+
+.category{
+background:#2563eb;
+padding:12px;
+border-radius:8px;
+font-weight:bold;
+}
+
+.cell{
+background:#1e293b;
+padding:25px;
+border-radius:8px;
+cursor:pointer;
+font-size:20px;
+}
+
+button{
+padding:10px 20px;
+margin:8px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.blue{background:#3b82f6;}
+.red{background:#ef4444;}
+.yellow{background:#fbbf24;}
+
+#questionPage{
+display:none;
+}
+
+img{
+width:300px;
+border-radius:10px;
+margin-top:15px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>🎮 لعبة الاستراحة</h1>
+
+<input id="team1" placeholder="اسم الفريق الأول">
+<input id="team2" placeholder="اسم الفريق الثاني">
+
+<h2>
+🔵 <span id="t1">الفريق الأول</span> :
+<span id="s1">0</span>
+
+|
+
+🔴 <span id="t2">الفريق الثاني</span> :
+<span id="s2">0</span>
+</h2>
+
+<div id="board" class="board">
+
+<div class="category">رياضة</div>
+<div class="category">جغرافيا</div>
+<div class="category">تاريخ</div>
+<div class="category">علوم</div>
+<div class="category">أفلام</div>
+<div class="category">معلومات</div>
+
+<div class="cell" onclick="openQ(0,this)">100</div>
+<div class="cell" onclick="openQ(1,this)">100</div>
+<div class="cell" onclick="openQ(2,this)">100</div>
+<div class="cell" onclick="openQ(3,this)">100</div>
+<div class="cell" onclick="openQ(4,this)">100</div>
+<div class="cell" onclick="openQ(5,this)">100</div>
+
+<div class="cell" onclick="openQ(6,this)">300</div>
+<div class="cell" onclick="openQ(7,this)">300</div>
+<div class="cell" onclick="openQ(8,this)">300</div>
+<div class="cell" onclick="openQ(9,this)">300</div>
+<div class="cell" onclick="openQ(10,this)">300</div>
+<div class="cell" onclick="openQ(11,this)">300</div>
+
+<div class="cell" onclick="openQ(12,this)">500</div>
+<div class="cell" onclick="openQ(13,this)">500</div>
+<div class="cell" onclick="openQ(14,this)">500</div>
+<div class="cell" onclick="openQ(15,this)">500</div>
+<div class="cell" onclick="openQ(16,this)">500</div>
+<div class="cell" onclick="openQ(17,this)">500</div>
+
+</div>
+
+<div id="questionPage">
+
+<h2 id="q"></h2>
+
+<img id="img">
+
+<h2>⏱️ <span id="timer">15</span></h2>
+
+<button class="yellow" onclick="showAnswer()">إظهار الإجابة</button>
+
+<h3 id="ans"></h3>
+
+<br>
+
+<button class="blue" onclick="score(1)">الفريق الأول</button>
+<button class="red" onclick="score(2)">الفريق الثاني</button>
+
+<br>
+
+<button onclick="back()">رجوع</button>
+
+</div>
+
+<script>
+
+let questions=[
+["كم لاعب في فريق كرة القدم؟","11","football"],
+["أكبر قارة في العالم؟","آسيا","asia map"],
+["من بنى الأهرامات؟","المصريون القدماء","pyramids"],
+["ما الكوكب الأحمر؟","المريخ","mars"],
+["أشهر صناعة أفلام؟","هوليوود","hollywood"],
+["كم عدد أيام السنة؟","365","calendar"],
+
+["كم مرة فاز البرازيل بكأس العالم؟","5","brazil football"],
+["أطول نهر في العالم؟","النيل","nile river"],
+["متى بدأت الحرب العالمية الثانية؟","1939","world war"],
+["ما أسرع حيوان بري؟","الفهد","cheetah"],
+["من بطل فيلم تايتنك؟","ليوناردو دي كابريو","titanic movie"],
+["أكبر عضو في جسم الإنسان؟","الجلد","human skin"],
+
+["كم عدد لاعبي كرة السلة؟","5","basketball"],
+["أكبر محيط؟","الهادئ","pacific ocean"],
+["من اكتشف أمريكا؟","كولومبس","columbus"],
+["ما أقرب كوكب للشمس؟","عطارد","mercury"],
+["أول فيلم ملون؟","ذهب مع الريح","classic film"],
+["كم عدد قارات العالم؟","7","world map"]
+]
+
+let points=[100,100,100,100,100,100,300,300,300,300,300,300,500,500,500,500,500,500]
+
+let cellUsed
+let current
+let timerInt
+
+function openQ(i,cell){
+
+cellUsed=cell
+current=i
+
+document.getElementById("board").style.display="none"
+document.getElementById("questionPage").style.display="block"
+
+document.getElementById("q").innerText=questions[i][0]
+
+document.getElementById("img").src=
+"https://source.unsplash.com/600x400/?"+questions[i][2]
+
+startTimer()
+
+}
+
+function startTimer(){
+
+let t=15
+document.getElementById("timer").innerText=t
+
+timerInt=setInterval(()=>{
+
+t--
+document.getElementById("timer").innerText=t
+
+if(t==0)clearInterval(timerInt)
+
+},1000)
+
+}
+
+function showAnswer(){
+
+document.getElementById("ans").innerText=questions[current][1]
+
+}
+
+let s1=0
+let s2=0
+
+function score(team){
+
+if(team==1){
+s1+=points[current]
+document.getElementById("s1").innerText=s1
+}else{
+s2+=points[current]
+document.getElementById("s2").innerText=s2
+}
+
+cellUsed.style.visibility="hidden"
+
+back()
+
+}
+
+function back(){
+
+clearInterval(timerInt)
+
+document.getElementById("questionPage").style.display="none"
+document.getElementById("board").style.display="grid"
+
+}
+
+</script>
+
+</body>
+</html>
