@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>لعبة الاستراحة</title>
+
+<style>
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+}
+
+.board{
+display:grid;
+grid-template-columns:repeat(6,1fr);
+gap:10px;
+width:95%;
+margin:auto;
+margin-top:30px;
+}
+
+.cell{
+background:#1e293b;
+padding:25px;
+border-radius:10px;
+cursor:pointer;
+font-size:22px;
+}
+
+.category{
+background:#2563eb;
+padding:15px;
+border-radius:10px;
+font-weight:bold;
+}
+
+button{
+padding:10px 20px;
+margin:10px;
+border:none;
+border-radius:8px;
+font-size:16px;
+}
+
+.blue{background:#3b82f6;}
+.red{background:#ef4444;}
+.show{background:#fbbf24;}
+</style>
+
+</head>
+
+<body>
+
+<h1>🎮 لعبة الاستراحة</h1>
+
+<h2>
+🔵 <span id="score1">0</span> |
+🔴 <span id="score2">0</span>
+</h2>
+
+<div class="board">
+
+<div class="category">رياضة</div>
+<div class="category">جغرافيا</div>
+<div class="category">تاريخ</div>
+<div class="category">علوم</div>
+<div class="category">أفلام</div>
+<div class="category">معلومات</div>
+
+<div class="cell" onclick="openQ('football',100)">100</div>
+<div class="cell" onclick="openQ('asia map',100)">100</div>
+<div class="cell" onclick="openQ('pharaoh',100)">100</div>
+<div class="cell" onclick="openQ('planet',100)">100</div>
+<div class="cell" onclick="openQ('cinema',100)">100</div>
+<div class="cell" onclick="openQ('brain',100)">100</div>
+
+<div class="cell" onclick="openQ('world cup',300)">300</div>
+<div class="cell" onclick="openQ('africa map',300)">300</div>
+<div class="cell" onclick="openQ('roman empire',300)">300</div>
+<div class="cell" onclick="openQ('space',300)">300</div>
+<div class="cell" onclick="openQ('movie camera',300)">300</div>
+<div class="cell" onclick="openQ('knowledge',300)">300</div>
+
+<div class="cell" onclick="openQ('stadium',500)">500</div>
+<div class="cell" onclick="openQ('pacific ocean',500)">500</div>
+<div class="cell" onclick="openQ('ancient war',500)">500</div>
+<div class="cell" onclick="openQ('galaxy',500)">500</div>
+<div class="cell" onclick="openQ('hollywood',500)">500</div>
+<div class="cell" onclick="openQ('thinking',500)">500</div>
+
+</div>
+
+<h2 id="question">السؤال سيظهر هنا</h2>
+
+<img id="img" width="300">
+
+<h2>⏱️ <span id="timer">15</span></h2>
+
+<button class="show" onclick="showAnswer()">إظهار الإجابة</button>
+
+<h3 id="answer"></h3>
+
+<button class="blue" onclick="addScore(1)">الفريق الأول</button>
+<button class="red" onclick="addScore(2)">الفريق الثاني</button>
+
+<script>
+
+let currentPoints=0
+
+function openQ(img,points){
+
+currentPoints=points
+
+document.getElementById("question").innerText="فكر في الإجابة!"
+
+document.getElementById("img").src="https://source.unsplash.com/600x400/?"+img
+
+startTimer()
+
+}
+
+function showAnswer(){
+
+document.getElementById("answer").innerText="اكتب الإجابة بنفسك"
+
+}
+
+let score1=0
+let score2=0
+
+function addScore(team){
+
+if(team==1){
+score1+=currentPoints
+document.getElementById("score1").innerText=score1
+}else{
+score2+=currentPoints
+document.getElementById("score2").innerText=score2
+}
+
+}
+
+function startTimer(){
+
+let time=15
+document.getElementById("timer").innerText=time
+
+let t=setInterval(()=>{
+
+time--
+document.getElementById("timer").innerText=time
+
+if(time==0){
+clearInterval(t)
+}
+
+},1000)
+
+}
+
+</script>
+
+</body>
+</html>
